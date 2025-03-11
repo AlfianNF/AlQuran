@@ -27,40 +27,33 @@ class QuranController extends Controller
     {
         $client = new Client();
 
-        // Ambil halaman dari request, default 1
-        $page = max(1, (int) $request->query('page', 1)); // Pastikan halaman minimal 1
-        $perPage = 30; // Jumlah ayat per halaman
+        $page = max(1, (int) $request->query('page', 1)); 
+        $perPage = 30; 
 
-        // Hitung jumlah total halaman
         $totalPages = ceil($jumlahAyat / $perPage);
 
-        // Hitung batas awal dan akhir untuk setiap halaman
         $startAyat = ($page - 1) * $perPage + 1;
         $endAyat = min($startAyat + $perPage - 1, $jumlahAyat);
 
-        // Fetch data ayat sesuai range halaman
         $url = "https://api.myquran.com/v2/quran/ayat/$surat/$startAyat-$endAyat";
         $response = $client->request('GET', $url);
         $body = $response->getBody()->getContents();
         $data = json_decode($body, true);
 
-        // Ubah data menjadi Collection
         $ayatList = collect($data['status'] ? $data['data'] : []);
-
-        // Buat Paginator
         $paginator = new LengthAwarePaginator(
-            $ayatList, // Data ayat
-            $jumlahAyat, // Total jumlah ayat dalam surat
-            $perPage, // Ayat per halaman
-            $page, // Halaman saat ini
-            ['path' => url()->current()] // Pastikan path pagination menggunakan query string
+            $ayatList, 
+            $jumlahAyat,
+            $perPage, 
+            $page,
+            ['path' => url()->current()] 
         );
 
         return view('quran.surat', [
-            'ayatList' => $paginator, // Kirim paginator ke Blade
+            'ayatList' => $paginator, 
             'surat' => $surat,
             'jumlahAyat' => $jumlahAyat,
-            'totalPages' => $totalPages, // Kirim jumlah halaman ke view
+            'totalPages' => $totalPages, 
         ]);
     }
 }

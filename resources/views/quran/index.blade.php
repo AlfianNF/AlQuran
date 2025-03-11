@@ -12,7 +12,7 @@
             <p class="text-danger">{{ $error }}</p>
         @endif
 
-        <table class="table table-striped">
+        <table class="table table-striped text-center">
             <thead>
                 <tr>
                     <th>Nomor Surah</th>
