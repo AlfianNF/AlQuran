@@ -53,4 +53,34 @@ class DoaController extends Controller
             'startIteration' => $startIteration,
         ]);
     }
+
+    public function lokasi(Request $request)
+    {
+        $search = $request->input('search');
+
+        $client = new Client();
+
+        try {
+            $response = $client->get('https://api.myquran.com/v2/sholat/kota/semua');
+
+            if ($response->getStatusCode() == 200) {
+                $data = json_decode($response->getBody(), true)['data'];
+                $collection = collect($data);
+
+                if ($search) {
+                    $filteredData = $collection->filter(function ($item) use ($search) {
+                        return stripos($item['lokasi'], $search) !== false;
+                    });
+
+                    return response()->json(['data' => $filteredData->values()]);
+                }
+
+                return response()->json(['data' => $data]);
+            } else {
+                return response()->json(['error' => 'Gagal mengambil data dari API', 'status' => $response->getStatusCode()], $response->getStatusCode());
+            }
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            return response()->json(['error' => 'Gagal mengambil data dari API: ' . $e->getMessage()], 500);
+        }
+    }
 }

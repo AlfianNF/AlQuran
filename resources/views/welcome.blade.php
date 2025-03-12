@@ -64,7 +64,7 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="text-center mb-5">Selamat Datang di APK Baca Quran</h1>
+        <h1 class="text-center my-3">Selamat Datang di APK Baca Quran</h1>
         <div class="btn-container">
             <a href="{{ route('surat.index') }}" class="a-button">
                 <button class="btn btn-primary">Alquran</button>
@@ -78,6 +78,11 @@
         <div class="btn-container">
             <a href="{{ route('doa.index') }}" class="a-button">
                 <button class="btn btn-primary">Doa Harian</button>
+            </a>
+        </div>
+        <div class="btn-container">
+            <a href="{{ route('jadwal.index') }}" class="a-button">
+                <button class="btn btn-primary">Jadwal Solat</button>
             </a>
         </div>
         <footer>
